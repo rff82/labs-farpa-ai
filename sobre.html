@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Sobre — Labs farpa.ai</title>
+  <link rel="stylesheet" href="tokens.css">
+  <link rel="stylesheet" href="themes.css">
+  <link rel="stylesheet" href="components.css">
+  <script src="theme-engine.js"></script>
+</head>
+<body class="theme-claro">
+  <header>
+    <a href="/">← Labs</a>
+    <button id="btn-alto-contraste">Alto contraste</button>
+  </header>
+  <main>
+    <h1>Sobre — Labs</h1>
+    <p>Laboratório de experimentos do ecossistema farpa.ai.</p>
+    <h2>Parte do ecossistema farpa</h2>
+    <ul>
+      <li><a href="https://farpa.ai">farpa.ai</a> — plataforma principal</li>
+      <li><a href="https://labs.farpa.ai">labs.farpa.ai</a> — experimentos</li>
+      <li><a href="https://health.farpa.ai">health.farpa.ai</a> — saúde</li>
+      <li><a href="https://fintech.farpa.ai">fintech.farpa.ai</a> — fintech</li>
+      <li><a href="https://library.farpa.ai">library.farpa.ai</a> — biblioteca</li>
+      <li><a href="https://docs.farpa.ai">docs.farpa.ai</a> — documentação</li>
+      <li><a href="https://api.farpa.ai">api.farpa.ai</a> — API</li>
+    </ul>
+  </main>
+  <script>
+    document.getElementById('btn-alto-contraste').addEventListener('click', () => {
+      document.body.classList.toggle('theme-alto-contraste');
+      localStorage.setItem('farpa-tema', document.body.className);
+    });
+    const temaSalvo = localStorage.getItem('farpa-tema');
+    if (temaSalvo) document.body.className = temaSalvo;
+  </script>
+</body>
+</html>

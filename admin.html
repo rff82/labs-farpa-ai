@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Admin — Labs farpa.ai</title>
+  <link rel="stylesheet" href="tokens.css">
+  <link rel="stylesheet" href="themes.css">
+  <link rel="stylesheet" href="components.css">
+  <script src="theme-engine.js"></script>
+</head>
+<body class="theme-claro">
+  <!-- PROTEGER COM CLOUDFLARE ACCESS ANTES DE PUBLICAR -->
+  <header>
+    <a href="/">← Labs</a>
+    <span>Admin</span>
+    <button id="btn-alto-contraste">Alto contraste</button>
+  </header>
+  <main>
+    <h1>Painel Admin — Labs</h1>
+    <section>
+      <h2>Status do Worker</h2>
+      <pre id="status-worker">Verificando...</pre>
+    </section>
+    <section>
+      <h2>Itens no banco</h2>
+      <pre id="itens-db">Carregando...</pre>
+    </section>
+  </main>
+  <script>
+    const WORKER_URL = 'https://labs-worker.rfelipefernandes.workers.dev';
+
+    document.getElementById('btn-alto-contraste').addEventListener('click', () => {
+      document.body.classList.toggle('theme-alto-contraste');
+      localStorage.setItem('farpa-tema', document.body.className);
+    });
+    const temaSalvo = localStorage.getItem('farpa-tema');
+    if (temaSalvo) document.body.className = temaSalvo;
+
+    fetch(`${WORKER_URL}/health`)
+      .then(r => r.json())
+      .then(d => { document.getElementById('status-worker').textContent = JSON.stringify(d, null, 2); })
+      .catch(() => { document.getElementById('status-worker').textContent = 'Worker offline.'; });
+
+    fetch(`${WORKER_URL}/db/items`)
+      .then(r => r.json())
+      .then(d => { document.getElementById('itens-db').textContent = JSON.stringify(d, null, 2); })
+      .catch(() => { document.getElementById('itens-db').textContent = 'Erro ao buscar itens.'; });
+  </script>
+</body>
+</html>

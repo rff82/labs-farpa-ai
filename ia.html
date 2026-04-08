@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>IA — Labs farpa.ai</title>
+  <link rel="stylesheet" href="tokens.css">
+  <link rel="stylesheet" href="themes.css">
+  <link rel="stylesheet" href="components.css">
+  <script src="theme-engine.js"></script>
+</head>
+<body class="theme-claro">
+  <header>
+    <a href="/">← Labs</a>
+    <button id="btn-alto-contraste">Alto contraste</button>
+  </header>
+  <main>
+    <h1>IA — Labs</h1>
+    <textarea id="prompt" rows="4" placeholder="Digite sua pergunta..."></textarea>
+    <button id="btn-enviar">Enviar</button>
+    <pre id="resposta">A resposta aparecerá aqui.</pre>
+  </main>
+  <script>
+    const WORKER_URL = 'https://labs-worker.rfelipefernandes.workers.dev';
+
+    document.getElementById('btn-alto-contraste').addEventListener('click', () => {
+      document.body.classList.toggle('theme-alto-contraste');
+      localStorage.setItem('farpa-tema', document.body.className);
+    });
+    const temaSalvo = localStorage.getItem('farpa-tema');
+    if (temaSalvo) document.body.className = temaSalvo;
+
+    document.getElementById('btn-enviar').addEventListener('click', async () => {
+      const prompt = document.getElementById('prompt').value.trim();
+      if (!prompt) return;
+      document.getElementById('resposta').textContent = 'Processando...';
+      try {
+        const res = await fetch(`${WORKER_URL}/ai`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ prompt })
+        });
+        const data = await res.json();
+        document.getElementById('resposta').textContent =
+          data.response || JSON.stringify(data, null, 2);
+      } catch (e) {
+        document.getElementById('resposta').textContent = 'Erro na chamada de IA.';
+      }
+    });
+  </script>
+</body>
+</html>

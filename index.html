@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Labs — farpa.ai</title>
+  <link rel="stylesheet" href="tokens.css">
+  <link rel="stylesheet" href="themes.css">
+  <link rel="stylesheet" href="components.css">
+  <script src="theme-engine.js"></script>
+</head>
+<body class="theme-claro">
+  <header>
+    <a href="https://farpa.ai">farpa.ai</a>
+    <nav>
+      <a href="/">Início</a>
+      <a href="/sobre.html">Sobre</a>
+    </nav>
+    <button id="btn-alto-contraste">Alto contraste</button>
+  </header>
+  <main>
+    <h1>Labs</h1>
+    <p>Laboratório de experimentos do ecossistema farpa.ai.</p>
+    <section id="conteudo">Carregando...</section>
+  </main>
+  <footer>
+    <p>parte do ecossistema <a href="https://farpa.ai">farpa.ai</a></p>
+  </footer>
+  <script>
+    const WORKER_URL = 'https://labs-worker.rfelipefernandes.workers.dev';
+
+    // Alto contraste
+    document.getElementById('btn-alto-contraste').addEventListener('click', () => {
+      document.body.classList.toggle('theme-alto-contraste');
+      localStorage.setItem('farpa-tema', document.body.className);
+    });
+    const temaSalvo = localStorage.getItem('farpa-tema');
+    if (temaSalvo) document.body.className = temaSalvo;
+
+    // Buscar dados do Worker
+    async function carregarDados() {
+      try {
+        const res = await fetch(`${WORKER_URL}/data`);
+        const data = await res.json();
+        document.getElementById('conteudo').textContent = JSON.stringify(data, null, 2);
+      } catch (e) {
+        document.getElementById('conteudo').textContent = 'Erro ao carregar dados.';
+      }
+    }
+    carregarDados();
+  </script>
+</body>
+</html>
